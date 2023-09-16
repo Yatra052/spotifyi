@@ -1,25 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import './output.css';
+import {BrowserRouter, Routes, Route,Navigate} from "react-router-dom";
+import LoginComponent from "./routes/Login";
+import SignupComponent from './routes/Signup';
+import HomeComponent from './routes/Home';
+import UploadSong from "./routes/UploadSong";
+import LoggedInHomeComponent from "./routes/LoggedInHome";
 
+import { useCookies } from 'react-cookie';
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+
+   const [cookie, setCookie] = useCookies(["token"]);
+  //  console.log(cookie.token);
+
+  return ( 
+   <div className="w-screen h-screen font-poppins">
+     <BrowserRouter>
+     {
+        cookie.token? (
+      
+     <Routes>
+
+      <Route path="/" element={<HelloComponent/>} />
+      <Route path="/home" element={<LoggedInHomeComponent/>} />
+      <Route path="/uploadSong" element={<UploadSong/>} />
+      <Route path="*" element={<Navigate to="/home"/>} />
+       </Routes>
+  ) : (
+       <Routes>
+       <Route path="/home" element={<HomeComponent/>}/>
+      <Route path="/login" element={<LoginComponent/>} />
+      <Route path="/signup" element={<SignupComponent/>} />
+      <Route path="*" element={<Navigate to="/login"/>} />
+      
+      <></>
+       </Routes>
+         
+     )}
+     </BrowserRouter>
+     </div>
+    
+
+    
   );
 }
+
+const HelloComponent = () =>{
+  return <div>This is hello from component</div>
+};
+
+
 
 export default App;
